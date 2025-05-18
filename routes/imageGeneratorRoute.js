@@ -15,59 +15,34 @@ router.post("/textToImages", async function (req, res, next) {
     let presignedUrls = [];
     //--- temp mock data ---
 
-    // let presignedUrls = [
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/f3914454-6704-45c5-bd59-ff8778bd5195.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133357Z&X-Amz-Expires=3600&X-Amz-Signature=a5d699321db68cd8790bf5174d72a5d4592c417a1687c18059f55821308492b4&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "f3914454-6704-45c5-bd59-ff8778bd5195",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/18f9fee8-a623-498b-ad8e-6b3454e79623.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133358Z&X-Amz-Expires=3600&X-Amz-Signature=74f648803ddd9afeb91a16e096b2b738cfebacf4b12993731fd402c2fc23f3a2&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "18f9fee8-a623-498b-ad8e-6b3454e79623",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/837e57ce-5dd5-4e36-86f9-b10ef5fcdca3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133358Z&X-Amz-Expires=3600&X-Amz-Signature=9ef06addf4dc36951558cd8e964d56ad04da6e26274e228442551c8fe14bbb25&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "837e57ce-5dd5-4e36-86f9-b10ef5fcdca3",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/f49a697d-1b71-4213-9f30-aa17a14458b9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133358Z&X-Amz-Expires=3600&X-Amz-Signature=3d734e0239ccb9dd3916b5d8416de46c79f9922c086665fc59758d442a405dde&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "f49a697d-1b71-4213-9f30-aa17a14458b9",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/e2779c1d-94a0-4eeb-a9eb-2036d91a1d00.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133358Z&X-Amz-Expires=3600&X-Amz-Signature=a8a440a57c5125c6d54147594a48b822fbe54048596d0138d71bdcfbefd83673&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "e2779c1d-94a0-4eeb-a9eb-2036d91a1d00",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/30fa6671-7ec3-4333-b413-0010ff6fada7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133359Z&X-Amz-Expires=3600&X-Amz-Signature=32e0f8e028d56cec39b5591aa723afb08766685c31884df31759408163328e5a&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "30fa6671-7ec3-4333-b413-0010ff6fada7",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/1b8d6b4e-ef22-478e-a1ba-a03711b48646.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133358Z&X-Amz-Expires=3600&X-Amz-Signature=16a69ef01acd0d6bc68037bc6c4232cd7ca633a8e31916b0afc49673960c05df&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "1b8d6b4e-ef22-478e-a1ba-a03711b48646",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/0ba60766-ce5c-42dd-b2a0-2f532e70245d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133357Z&X-Amz-Expires=3600&X-Amz-Signature=38b28219597109bf8edcaa6d3bbca4e462511a6256f33d78749db49cfb0b883f&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "0ba60766-ce5c-42dd-b2a0-2f532e70245d",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/aa5279b0-ff0f-4c1a-ae3b-8dcefb54eff2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133358Z&X-Amz-Expires=3600&X-Amz-Signature=c2fd182f28ddab93f8f68c3b3bfb757036d79f42767845c2b76784a5a97ae6c8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "aa5279b0-ff0f-4c1a-ae3b-8dcefb54eff2",
-    //   },
-    //   {
-    //     presignedUrl:
-    //       "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/23e6415c-046e-4237-a2ff-b0af4431ef8b.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250503%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250503T133357Z&X-Amz-Expires=3600&X-Amz-Signature=8186d23e68fef6e6f5e2c6316ab38bab82469355b8e163bbaf6a7115a54bfc12&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-    //     imageId: "23e6415c-046e-4237-a2ff-b0af4431ef8b",
-    //   },
-    // ];
-    // return res.status(200).json({ presignedUrls });
+    presignedUrls = [
+      {
+        presignedUrl:
+          "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/5351daec-7d80-4e4c-b428-e1542d78f057.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250518%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T065725Z&X-Amz-Expires=3600&X-Amz-Signature=03e74fd0566e715ddeb6eda709e20f0607580810feeaf9cdff56915c98213245&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+        imageId: "5351daec-7d80-4e4c-b428-e1542d78f057",
+      },
+      {
+        presignedUrl:
+          "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/9b4492df-4646-44c2-bf47-e98513075aa8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250518%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T065725Z&X-Amz-Expires=3600&X-Amz-Signature=dffd43163deca2b4b28c61fecc29098c24b419654aad7e1f29c35ff7003bc7e8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+        imageId: "9b4492df-4646-44c2-bf47-e98513075aa8",
+      },
+      {
+        presignedUrl:
+          "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/66dffe04-b94c-4179-a275-3c6fe0a3f26e.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250518%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T065725Z&X-Amz-Expires=3600&X-Amz-Signature=b8e6f767bc0511c5b110a7b00b2373bc89173ec9048dad7f3e64aa294277a021&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+        imageId: "66dffe04-b94c-4179-a275-3c6fe0a3f26e",
+      },
+      {
+        presignedUrl:
+          "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/b9a05e11-94aa-44af-94a0-37a2b38ae921.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250518%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T065725Z&X-Amz-Expires=3600&X-Amz-Signature=fd849835e87b9ff7637dbadb11262810dacbb0c1badafe1a38becc7a597f7bac&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+        imageId: "b9a05e11-94aa-44af-94a0-37a2b38ae921",
+      },
+      {
+        presignedUrl:
+          "https://replicate-ai-assets-image-dev.s3.ap-south-1.amazonaws.com/images/gaurav2/0b13cb29-f435-4275-85f1-59b119fc042c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZL3WBREUV4C7LSWE%2F20250518%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T065725Z&X-Amz-Expires=3600&X-Amz-Signature=65690dff7697bb763d986472a3c2400cde9350664b126fa243fe12dd206f0885&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+        imageId: "0b13cb29-f435-4275-85f1-59b119fc042c",
+      },
+    ];
+    return res.status(200).json({ presignedUrls });
 
     // -- end temp mock data --
 
@@ -116,6 +91,35 @@ router.post("/textToImages", async function (req, res, next) {
   } catch (error) {
     console.error("Error generating story:", error);
     res.status(500).json({ error: "Failed to generate story" });
+  }
+});
+
+/* GET presigned urls for existing images */
+router.post("/getPresignedUrl", async function (req, res, next) {
+  try {
+    const { ids } = req.body;
+    const userName = req.user.username;
+
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({ error: "Image ids array is required" });
+    }
+
+    const presignedUrls = await Promise.all(
+      ids.map(async (id) => {
+        let key = `images/${userName}/${id}.png`;
+        const presignedUrl = await getPresignedUrl(
+          process.env.AWS_BUCKET_NAME,
+          key,
+          id
+        );
+        return presignedUrl;
+      })
+    );
+
+    res.status(200).json({ presignedUrls });
+  } catch (error) {
+    console.error("Error getting presigned URLs:", error);
+    res.status(500).json({ error: "Failed to get presigned URLs" });
   }
 });
 
